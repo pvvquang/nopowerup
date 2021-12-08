@@ -1,28 +1,41 @@
 <template>
   <header>
     <div class="header">
-      <div class="container" v-if="isDestop">
+      <div class="container" v-if="isDesktop">
         <div class="header-wrap">
-          <router-link to="/" class="header-logo">
+          <router-link
+            to="/"
+            class="header-logo"
+            @click.native="handleShowNav()"
+          >
             <img src="../../assets/icons/logo.svg" alt="NoPowerUp" />
           </router-link>
           <Navigation :isMobile="isShowMenu" />
         </div>
       </div>
 
-      <div class="header-mobile" v-if="!isDestop">
+      <div
+        class="header-mobile"
+        :class="{ mobile: isMobile }"
+        v-if="!isDesktop"
+      >
         <div class="header-wrap">
           <router-link to="/" class="header-logo">
             <img src="../../assets/icons/logo.svg" alt="NoPowerUp" />
           </router-link>
           <div class="menu">
-            <div class="title">Menu</div>
+            <transition class="fade">
+              <div class="title" v-if="isShowMenu && isMobile">Menu</div>
+            </transition>
+            <div class="title" v-if="isTablet">Menu</div>
             <div class="btn-icon">
               <i class="fas fa-bars" @click="showMenu" v-if="!isShowMenu"></i>
               <i class="fas fa-times" @click="showMenu" v-if="isShowMenu"></i>
             </div>
+            <transition name="fade">
+              <Navigation @clickShowNav="handleShowNav()" v-if="isShowMenu" />
+            </transition>
           </div>
-          <Navigation :active="isShowMenu" v-if="isShowMenu" />
         </div>
       </div>
     </div>
@@ -44,11 +57,24 @@ export default {
     showMenu() {
       this.isShowMenu = !this.isShowMenu;
     },
+    handleShowNav() {
+      this.isShowMenu = false;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.fade-enter-active {
+  transition: all 0.3s ease;
+}
+.fade-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
 .header {
   width: 100%;
   height: 80px;
@@ -74,10 +100,21 @@ export default {
       position: relative;
     }
 
+    &.mobile {
+      .header-wrap {
+        padding-left: 25px;
+        padding-right: 25px;
+      }
+    }
+
     .menu {
       display: flex;
       align-items: center;
       justify-content: center;
+
+      .btn-icon {
+        width: 54px;
+      }
 
       .title {
         font-size: 14px;

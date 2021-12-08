@@ -3,33 +3,33 @@ export default {
     return {
       isMobile: false,
       isTablet: false,
-      isDestop: false,
-    }
+      isDesktop: false,
+    };
   },
   methods: {
     onResize() {
-      if(window.innerWidth < 768) {
+      if (window.innerWidth < 768) {
         this.isMobile = true;
         this.isTablet = false;
-        this.isDestop = false;
+        this.isDesktop = false;
       }
-      if(window.innerWidth >= 768) {
+      if (window.innerWidth >= 768) {
         this.isMobile = false;
         this.isTablet = true;
-        this.isDestop = false;
+        this.isDesktop = false;
       }
-      if(window.innerWidth > 1024) {
+      if (window.innerWidth > 1024) {
         this.isMobile = false;
         this.isTablet = false;
-        this.isDestop = true;
+        this.isDesktop = true;
       }
-    }
+    },
   },
   created() {
     this.onResize();
     window.addEventListener("resize", this.onResize);
   },
   destroyed() {
-    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener("resize", this.onResize);
   },
-}
+};
